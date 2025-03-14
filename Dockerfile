@@ -1,4 +1,4 @@
-FROM nuclia/nucliadb:2.26.0
+FROM nuclia/nucliadb:latest
 
 # Set environment variables
 ENV NUCLIADB_HOST=0.0.0.0 \
