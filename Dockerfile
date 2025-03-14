@@ -1,13 +1,43 @@
-# Use the official NucliaDB image
-FROM ghcr.io/nuclia/nucliadb:latest
+FROM python:3.12-slim
 
-# Set environment variables (to be set in Render)
-ENV DRIVER_PG_URL=postgresql://n8ndb_up4r_user:IyuLg18GEPWNify32bLQYFOK2dOYDf8o@dpg-cv9ueajtq21c73bokqj0-a/n8ndb_up4r
-ENV NDX_MODE=standalone
-ENV LOG_LEVEL=info
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Expose the default NucliaDB port
+# Install system dependencies required for NucliaDB and its dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    pkg-config \
+    libssl-dev \
+    git \
+    curl \
+    gcc \
+    g++ \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Install Rust (needed for nidx_binding)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose port for NucliaDB
 EXPOSE 8080
 
-# Start NucliaDB
+# Command to run NucliaDB
 CMD ["nucliadb"]
