@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: nucliadb
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NUCLIADB_HOST
+        value: 0.0.0.0
+      - key: NUCLIADB_PORT
+        value: 8080
+    plan: free
+    disk:
+      name: nucliadb-data
+      mountPath: /app/data
+      sizeGB: 1
