@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: nucliadb
+    name: nucliadb2
     env: docker
     dockerfilePath: ./Dockerfile
     envVars:
