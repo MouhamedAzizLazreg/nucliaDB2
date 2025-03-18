@@ -14,3 +14,17 @@ services:
         value: true
       - key: NUCLIADB_DEBUG
         value: false
+      - key: DRIVER
+        value: pg
+      - key: NUCLIADB_INGEST_PATH
+        value: /
+      - key: DATABASE_URL
+        fromService:
+          type: postgres
+          name: nucliadb-postgres
+          property: connectionString
+
+  - type: postgres
+    name: nucliadb-postgres
+    ipAllowList: []
+    plan: free
