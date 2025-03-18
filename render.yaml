@@ -3,7 +3,7 @@ services:
     name: nucliadb
     env: docker
     dockerfilePath: ./Dockerfile
-    plan: standard
+    plan: free
     healthCheckPath: /healthz
     envVars:
       - key: NUCLIADB_HOST
